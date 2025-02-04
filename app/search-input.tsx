@@ -14,7 +14,7 @@ const SearchInput = () => {
     const fetchResults = async () => {
       if (!input) return setSearchResults(undefined);
 
-      // Fetch results here
+      const response = await fetch(`/api/search?q=${input}`);
     };
 
     fetchResults();

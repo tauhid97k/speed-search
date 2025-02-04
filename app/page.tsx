@@ -1,5 +1,11 @@
+import SearchInput from "./search-input";
+
 const HomePage = () => {
-  return <div>Home Page</div>;
+  return (
+    <main className="h-screen py-4 grid place-items-center">
+      <SearchInput />
+    </main>
+  );
 };
 
 export default HomePage;
