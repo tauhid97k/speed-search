@@ -38,7 +38,9 @@ const SearchInput = () => {
         return setSearchResults(undefined);
       }
 
-      const response = await fetch(`/api/search?q=${debouncedInput}`);
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/search?q=${debouncedInput}`
+      );
       const data = await response.json();
       setSearchResults(data);
     };
@@ -57,7 +59,7 @@ const SearchInput = () => {
         />
 
         <CommandList>
-          {searchResults?.results.length === 0 && !debouncedInput ? (
+          {searchResults?.results.length === 0 ? (
             <CommandEmpty>No results found.</CommandEmpty>
           ) : null}
 

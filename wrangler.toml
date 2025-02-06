@@ -1,0 +1,6 @@
+name = "speed-search"
+compatibility_date = "2025-02-06"
+
+[vars]
+UPSTASH_REDIS_REST_URL = "https://refined-hen-10515.upstash.io"
+UPSTASH_REDIS_REST_TOKEN = "ASkTAAIjcDE2ZTJlOGZmZjQyZDQ0OTQ4YmM2NzQ2MDUzM2VkMWIyNXAxMA"

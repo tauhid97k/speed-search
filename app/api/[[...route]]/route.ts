@@ -1,6 +1,7 @@
-import { Redis } from "@upstash/redis";
+import { Redis } from "@upstash/redis/cloudflare";
 import { Hono } from "hono";
 import { env } from "hono/adapter";
+import { cors } from "hono/cors";
 import { handle } from "hono/vercel";
 
 export const runtime = "edge";
@@ -12,6 +13,7 @@ type Bindings = {
 
 const app = new Hono<{ Bindings: Bindings }>().basePath("/api");
 
+app.use("*", cors());
 app.get("/search", async (c) => {
   try {
     const { UPSTASH_REDIS_REST_URL, UPSTASH_REDIS_REST_TOKEN } = env(c);
@@ -64,4 +66,4 @@ app.get("/search", async (c) => {
 });
 
 export const GET = handle(app);
-export const POST = handle(app);
+export default app as never;
