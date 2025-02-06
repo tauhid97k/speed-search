@@ -270,7 +270,7 @@ countryList.forEach((country) => {
   terms.push({ score: 0, member: term + "*" });
 
   const populateDB = async () => {
-    // @ts-expect-error
+    // @ts-expect-error The Redis library types are not fully compatible with the spread syntax used here.
     await redis.zadd("terms", ...terms);
   };
 
