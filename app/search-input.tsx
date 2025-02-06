@@ -10,25 +10,41 @@ import {
 } from "@/components/ui/command";
 import { useEffect, useState } from "react";
 
+interface SearchResults {
+  results: string[];
+  duration: number;
+}
+
 const SearchInput = () => {
   const [input, setInput] = useState<string>("");
-  const [searchResults, setSearchResults] = useState<{
-    results: string[];
-    duration: number;
-  }>();
+  const [debouncedInput, setDebouncedInput] = useState<string>("");
+  const [searchResults, setSearchResults] = useState<SearchResults | undefined>(
+    undefined
+  );
 
-  // Get results on input change
+  // Debounce Input
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedInput(input);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [input]);
+
+  // Get results on debounced input change
   useEffect(() => {
     const fetchResults = async () => {
-      if (!input) return setSearchResults(undefined);
+      if (!debouncedInput) {
+        return setSearchResults(undefined);
+      }
 
-      const response = await fetch(`/api/search?q=${input}`);
+      const response = await fetch(`/api/search?q=${debouncedInput}`);
       const data = await response.json();
       setSearchResults(data);
     };
 
     fetchResults();
-  }, [input]);
+  }, [debouncedInput]);
 
   return (
     <div className="w-full max-w-md">
@@ -41,14 +57,21 @@ const SearchInput = () => {
         />
 
         <CommandList>
-          {searchResults?.results.length === 0 && !input ? (
+          {searchResults?.results.length === 0 && !debouncedInput ? (
             <CommandEmpty>No results found.</CommandEmpty>
           ) : null}
 
           {searchResults?.results.length ? (
             <CommandGroup heading="Results">
               {searchResults?.results.map((result) => (
-                <CommandItem key={result} value={result} onSelect={setInput}>
+                <CommandItem
+                  key={result}
+                  value={result}
+                  onSelect={(selectedValue) => {
+                    setDebouncedInput("");
+                    setInput(selectedValue);
+                  }}
+                >
                   {result}
                 </CommandItem>
               ))}
